@@ -1,5 +1,6 @@
-import 'package:evstats/pages/session_entry.dart';
 import 'package:flutter/material.dart';
+
+import 'pages/session_entry.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

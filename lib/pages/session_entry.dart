@@ -1,9 +1,7 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../utilities/date_util.dart';
 import '../widgets/evs_app_bar.dart';
 
 class SessionEntry extends StatefulWidget {
@@ -14,30 +12,44 @@ class SessionEntry extends StatefulWidget {
 }
 
 class _SessionEntryState extends State<SessionEntry> {
-  int selectedChargeLocation = 1;
+  final _now = DateTime.now();
+  final _formkey = GlobalKey<FormState>();
+  final _kwhController = TextEditingController();
+  final _dateController = TextEditingController(text: getFormattedDate());
 
-  // utilities
-  _getTodaysDate() {
-    final now = DateTime.now();
-    final year = now.year.toString();
-    final month = now.month.toString().padLeft(2, '0');
-    final day = now.day.toString().padLeft(2, '0');
+  int _selectedChargeLocation = 1;
 
-    final formatted = '$month/$day/$year';
-
-    return formatted;
+  void _handleChargeLocationSelected(int? value) {
+    _selectedChargeLocation = value!;
   }
 
-  void _handleOnChargeLocationSelected(int? value) {
-    setState(() {
-      selectedChargeLocation = value!;
-    });
+  void _handleAddPress() {
+    _formkey.currentState!.validate();
+    print('selected location: $_selectedChargeLocation');
+  }
+
+  void _handleClearPress() {
+    _formkey.currentState!.reset();
+    _selectedChargeLocation = 1;
+  }
+
+  void _handlePickDatePress() async {
+    DateTime? selected = await showDatePicker(
+      context: context,
+      initialDate: _now,
+      firstDate: DateTime(_now.year),
+      lastDate: DateTime(_now.year + 1),
+    );
+
+    if (selected == null) {
+      return;
+    }
+
+    _dateController.text = getFormattedDate(date: selected);
   }
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeContext = Theme.of(context);
-
     return Scaffold(
       appBar: EvsAppBar(
         context: context,
@@ -46,6 +58,7 @@ class _SessionEntryState extends State<SessionEntry> {
       body: SafeArea(
         minimum: const EdgeInsets.all(8.0),
         child: Form(
+          key: _formkey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -56,6 +69,7 @@ class _SessionEntryState extends State<SessionEntry> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 maxLength: 3,
+                controller: _kwhController,
                 // this makes it required
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -65,12 +79,36 @@ class _SessionEntryState extends State<SessionEntry> {
                   return null;
                 },
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Date',
-                  hintText: _getTodaysDate(),
-                ),
-                keyboardType: TextInputType.datetime,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'YYYY-MM-DD',
+                        labelText: 'Date *',
+                      ),
+                      keyboardType: TextInputType.datetime,
+                      controller: _dateController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Date is required';
+                        }
+
+                        if (DateTime.tryParse(value) == null) {
+                          return 'Invalid date';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ),
+                  // todo - move down to align with input
+                  IconButton(
+                    onPressed: _handlePickDatePress,
+                    icon: const Icon(Icons.event),
+                  )
+                ],
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16),
@@ -78,7 +116,7 @@ class _SessionEntryState extends State<SessionEntry> {
                 child: DropdownMenu<int>(
                   width: 200,
                   label: const Text('Charge location'),
-                  initialSelection: selectedChargeLocation,
+                  initialSelection: _selectedChargeLocation,
                   inputDecorationTheme: const InputDecorationTheme(
                     filled: false,
                   ),
@@ -88,21 +126,23 @@ class _SessionEntryState extends State<SessionEntry> {
                     DropdownMenuEntry(value: 3, label: 'Other'),
                     DropdownMenuEntry(value: 4, label: 'DC'),
                   ],
-                  onSelected: _handleOnChargeLocationSelected,
+                  onSelected: _handleChargeLocationSelected,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {/** noop */},
-                      child: const Text('Add'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
+                    Expanded(
                       child: ElevatedButton(
-                        onPressed: () {/** noop */},
+                        onPressed: _handleAddPress,
+                        child: const Text('Add'),
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _handleClearPress,
                         child: const Text('Clear'),
                       ),
                     ),
