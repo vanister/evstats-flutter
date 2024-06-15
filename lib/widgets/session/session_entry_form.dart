@@ -1,10 +1,11 @@
-import 'package:evstats/widgets/session/session_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'session_validators.dart';
 import '../../utilities/date_util.dart';
 
 class SessionEntryForm extends StatefulWidget {
+  // todo - take in onClearPress and onAddPress
   const SessionEntryForm({super.key});
 
   @override
@@ -57,7 +58,7 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
         children: <Widget>[
           TextFormField(
             decoration: const InputDecoration(
-              labelText: "kWh added *",
+              labelText: 'kWh added *',
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
