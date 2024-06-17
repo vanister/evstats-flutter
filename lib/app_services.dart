@@ -1,37 +1,31 @@
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'data/db_connection.dart';
 import 'data/db_context.dart';
+
+// todo - refactor this to be AppStartup
+// todo - take in the ServiceLocator to register services here
 
 /// The services that are used by the app.
 class AppServices {
   static final _getItInstance = GetIt.instance;
-  static bool _initialized = false;
 
   /// Gets the service [locator] instance.
   static GetIt get locator => _getItInstance;
 
-  /// Call [init] at app startup to setup and register the services
-  /// that are used in the app globally.
-  ///
-  /// See the `_registerServices` function in this class to add more
-  /// services to the locator.
   static void init() {
-    if (_initialized) {
-      return;
-    }
-
-    _registerServices();
-    _initialized = true;
+    registerServices();
   }
 
-  // todo - consider making this public
-  static void _registerServices() {
+  // todo - invert getit deps into a ServiceLocator object
+  static void registerServices() {
     _getItInstance.registerLazySingletonAsync<DbContext>(() async {
       final String databasePath = await getDatabasesPath();
-      final context = SqliteDbContext(databasePath);
-      // open the connection to the database
-      await context.open();
+      final DbConnection connection = SqliteConnection(databasePath);
+      final Database database = await connection.database;
+
+      final context = SqliteDbContext(database);
 
       return context;
     });
