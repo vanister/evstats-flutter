@@ -18,9 +18,14 @@ class _SessionEntryState extends State<SessionEntry> {
         context: context,
         titleText: 'Session Entry',
       ),
-      body: const SafeArea(
-        minimum: EdgeInsets.all(8.0),
-        child: SessionEntryForm(),
+      body: SafeArea(
+        minimum: const EdgeInsets.all(8.0),
+        child: SessionEntryForm(
+          onSubmit: (session) {
+            print('valid session was entered');
+            print(session);
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'New entry',

@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../models/session.dart';
 import 'session_validators.dart';
 import '../../utilities/date_util.dart';
 
 class SessionEntryForm extends StatefulWidget {
+  /// Raised when a valid session entry has been made in the form and the
+  /// `Add` button is clicked.
+  final Function(Session) onSubmit;
+
+  /// Raised when the clear button is clicked.
+  final Function()? onClear;
+
   // todo - take in onClearPress and onAddPress
-  const SessionEntryForm({super.key});
+  const SessionEntryForm({super.key, required this.onSubmit, this.onClear});
 
   @override
   State<SessionEntryForm> createState() => _SessionEntryFormState();
@@ -18,6 +26,7 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
   final _kwhController = TextEditingController();
   final _dateController = TextEditingController(text: getFormattedDate());
 
+  // this is the rateId, 1 is Home
   int _selectedChargeLocation = 1;
 
   void _handleChargeLocationSelected(int? value) {
@@ -25,13 +34,32 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
   }
 
   void _handleAddPress() {
-    _formkey.currentState!.validate();
-    print('selected location: $_selectedChargeLocation');
+    if (!_formkey.currentState!.validate()) {
+      // show an error message?
+      // do do anything
+      return;
+    }
+
+    // todo - make a helper that can be injected
+    var session = Session(
+      rateId: _selectedChargeLocation,
+      kWh: int.parse(_kwhController.text),
+      date: DateTime.parse(
+        _dateController.text,
+      ),
+    );
+
+    widget.onSubmit(session);
   }
 
   void _handleClearPress() {
     _formkey.currentState!.reset();
     _selectedChargeLocation = 1;
+
+    // raise for others to know
+    if (widget.onClear != null) {
+      widget.onClear!();
+    }
   }
 
   void _handlePickDatePress() async {

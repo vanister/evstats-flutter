@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/session_entry.dart';
+import 'screens/session_entry_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

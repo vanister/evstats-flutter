@@ -1,6 +1,6 @@
 class Session {
   final int? id;
-  final int vehicleId;
+  final int? vehicleId;
 
   late DateTime date;
   int kWh = 0;
@@ -9,7 +9,11 @@ class Session {
 
   Session({
     this.id,
-    required this.vehicleId,
+    this.vehicleId,
+    DateTime? date,
+    int kWh = 0,
+    int rateId = 1, // home
+    this.rateOverride,
   }) {
     var now = DateTime.now();
 
