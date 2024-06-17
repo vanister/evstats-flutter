@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
-import 'app_services.dart';
+import 'app_startup.dart';
 
 void main() async {
-  AppServices.init();
+  AppStartup.registerServices();
 
   runApp(const App());
 }
