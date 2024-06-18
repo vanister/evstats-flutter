@@ -9,6 +9,7 @@ import '../services/session_service.dart';
 import '../widgets/evs_app_bar.dart';
 import '../widgets/session/date_picker_range.dart';
 import '../widgets/session/session_entry_form.dart';
+import '../widgets/session/session_form.dart';
 
 class SessionEntry extends StatefulWidget {
   const SessionEntry({super.key});
@@ -32,6 +33,15 @@ class _SessionEntryState extends State<SessionEntry> {
     _sessionService = sessionService ?? ServiceLocator.get<SessionService>();
     _rateService = rateService ?? ServiceLocator.get<RateService>();
     _logService = logService ?? ServiceLocator.get<LogService>();
+  }
+
+  void handleFormSubmit(SessionForm entry) async {
+    _logService.log('handle session form submit');
+    // todo - try/catch
+    var session = Session.fromFormEntry(entry);
+    var addedSession = await _sessionService.insert(session);
+
+    _logService.log('saved session to db with id: ${addedSession.id}');
   }
 
   @override
@@ -61,20 +71,13 @@ class _SessionEntryState extends State<SessionEntry> {
         child: SessionEntryForm(
           rateTypes: _rateTypes,
           datePickerRange: _datePickerRange,
-          onSubmit: (entry) async {
-            _logService.log('successfully submitted session form');
-
-            var session = Session.fromFormEntry(entry);
-            var addedSession = await _sessionService.insert(session);
-
-            _logService.log('saved session to db with id: ${addedSession.id}');
-          },
+          onSubmit: handleFormSubmit,
         ),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'New Session',
         onPressed: () {
-          /** noop */
+          // todo
         },
         child: const Icon(Icons.add),
       ),
