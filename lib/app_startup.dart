@@ -2,7 +2,10 @@ import 'package:sqflite/sqflite.dart';
 
 import 'data/db_connection.dart';
 import 'data/db_context.dart';
+import 'services/log_service.dart';
+import 'services/rate_service.dart';
 import 'services/service_locator.dart';
+import 'services/session_service.dart';
 
 abstract class AppStartup {
   /// Registers the services that are used by the app.
@@ -16,5 +19,10 @@ abstract class AppStartup {
 
       return context;
     });
+
+    ServiceLocator.registerLazySingleton<LogService>(() => ConsoleLogService());
+    ServiceLocator.registerLazySingleton<RateService>(() => EvsRateService());
+    ServiceLocator.registerLazySingleton<SessionService>(
+        () => EvsSessionService());
   }
 }

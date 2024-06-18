@@ -1,33 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../models/session.dart';
-import 'session_validators.dart';
-import '../../utilities/date_util.dart';
+import '../../models/rate_type.dart';
+import 'date_picker_range.dart';
+import 'session_form.dart';
+import 'session_helper.dart';
+import 'session_validator.dart';
+import '../../helpers/date_helper.dart';
 
 class SessionEntryForm extends StatefulWidget {
   /// Raised when a valid session entry has been made in the form and the
   /// `Add` button is clicked.
-  final Function(Session) onSubmit;
+  final Function(SessionForm) onSubmit;
 
   /// Raised when the clear button is clicked.
   final Function()? onClear;
 
-  // todo - take in onClearPress and onAddPress
-  const SessionEntryForm({super.key, required this.onSubmit, this.onClear});
+  final Iterable<RateType> rateTypes;
+
+  final DatePickerRange datePickerRange;
+
+  const SessionEntryForm({
+    super.key,
+    this.onClear,
+    required this.onSubmit,
+    required this.rateTypes,
+    required this.datePickerRange,
+  });
 
   @override
   State<SessionEntryForm> createState() => _SessionEntryFormState();
 }
 
 class _SessionEntryFormState extends State<SessionEntryForm> {
-  final _now = DateTime.now();
   final _formkey = GlobalKey<FormState>();
   final _kwhController = TextEditingController();
   final _dateController = TextEditingController(text: getFormattedDate());
-
+  late final DatePickerRange _dataPickerRange;
+  late final List<DropdownMenuEntry<int>> _rateTypeEntries;
   // this is the rateId, 1 is Home
   int _selectedChargeLocation = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _dataPickerRange = widget.datePickerRange;
+    _rateTypeEntries = getRateTypes(widget.rateTypes).toList();
+  }
 
   void _handleChargeLocationSelected(int? value) {
     _selectedChargeLocation = value!;
@@ -41,8 +61,8 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
     }
 
     // todo - make a helper that can be injected
-    var session = Session(
-      rateId: _selectedChargeLocation,
+    var session = SessionForm(
+      rateType: _selectedChargeLocation,
       kWh: int.parse(_kwhController.text),
       date: DateTime.parse(
         _dateController.text,
@@ -65,9 +85,9 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
   void _handlePickDatePress() async {
     DateTime? selected = await showDatePicker(
       context: context,
-      initialDate: _now,
-      firstDate: DateTime(_now.year),
-      lastDate: DateTime(_now.year + 1),
+      initialDate: _dataPickerRange.initial,
+      firstDate: _dataPickerRange.start,
+      lastDate: _dataPickerRange.end,
     );
 
     if (selected == null) {
@@ -109,7 +129,6 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
                   validator: validateDateField,
                 ),
               ),
-              // todo - move down to align with input
               IconButton(
                 onPressed: _handlePickDatePress,
                 icon: const Icon(Icons.event),
@@ -126,12 +145,7 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
               inputDecorationTheme: const InputDecorationTheme(
                 filled: false,
               ),
-              dropdownMenuEntries: const [
-                DropdownMenuEntry(value: 1, label: 'Home'),
-                DropdownMenuEntry(value: 2, label: 'Work'),
-                DropdownMenuEntry(value: 3, label: 'Other'),
-                DropdownMenuEntry(value: 4, label: 'DC'),
-              ],
+              dropdownMenuEntries: _rateTypeEntries,
               onSelected: _handleChargeLocationSelected,
             ),
           ),
