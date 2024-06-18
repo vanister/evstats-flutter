@@ -5,7 +5,7 @@ abstract class SessionService {
 
   Future<Iterable<Session>> list();
 
-  Future<Session> add(Session session);
+  Future<Session> insert(Session session);
 
   Future<void> update(Session session);
 
@@ -14,11 +14,12 @@ abstract class SessionService {
 
 class EvsSessionService implements SessionService {
   @override
-  Future<Session> add(Session session) async {
+  Future<Session> insert(Session session) async {
+    // todo - take in DbContext and query
     return Session(
       id: 1,
       vehicleId: 1,
-      rateId: session.rateId ?? 1,
+      rateId: session.rateId,
       kWh: session.kWh,
       date: session.date,
     );
@@ -26,25 +27,21 @@ class EvsSessionService implements SessionService {
 
   @override
   Future<void> delete(int id) {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
   Future<Session> get(int id) {
-    // TODO: implement get
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<Session>> list() {
-    // TODO: implement list
     throw UnimplementedError();
   }
 
   @override
   Future<void> update(Session session) {
-    // TODO: implement update
     throw UnimplementedError();
   }
 }

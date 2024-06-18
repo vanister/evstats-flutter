@@ -65,7 +65,7 @@ class _SessionEntryState extends State<SessionEntry> {
             _logService.log('successfully submitted session form');
 
             var session = Session.fromFormEntry(entry);
-            var addedSession = await _sessionService.add(session);
+            var addedSession = await _sessionService.insert(session);
 
             _logService.log('saved session to db with id: ${addedSession.id}');
           },
