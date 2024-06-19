@@ -1,4 +1,4 @@
-import '../models/session.dart';
+import '../models/db/session.dart';
 
 abstract class SessionService {
   Future<Session> get(int id);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/rate_type.dart';
+import '../models/db/rate_type.dart';
 
 Iterable<DropdownMenuEntry<int>> getRateTypes(Iterable<RateType> rateTypes) {
   final entries = rateTypes.map(

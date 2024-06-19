@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../models/rate_type.dart';
-import 'date_picker_range.dart';
-import 'session_form.dart';
-import 'session_helper.dart';
-import 'session_validator.dart';
+import '../../models/db/rate_type.dart';
+import '../../models/date_picker_range.dart';
+import '../../models/session_form_model.dart';
+import '../../helpers/session_helper.dart';
+import '../../validators/session_validator.dart';
 import '../../helpers/date_helper.dart';
 
 class SessionEntryForm extends StatefulWidget {

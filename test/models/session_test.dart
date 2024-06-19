@@ -1,4 +1,4 @@
-import 'package:evstats/models/session.dart';
+import 'package:evstats/models/db/session.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

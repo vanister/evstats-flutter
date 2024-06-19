@@ -1,4 +1,4 @@
-import '../models/rate_type.dart';
+import '../models/db/rate_type.dart';
 
 abstract class RateService {
   Iterable<RateType> getRateTypes();

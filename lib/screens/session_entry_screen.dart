@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../models/rate_type.dart';
-import '../models/session.dart';
+import '../models/db/rate_type.dart';
+import '../models/db/session.dart';
 import '../services/log_service.dart';
 import '../services/rate_service.dart';
 import '../services/service_locator.dart';
 import '../services/session_service.dart';
 import '../widgets/evs_app_bar.dart';
 import '../widgets/floating_add_button.dart';
-import '../widgets/session/date_picker_range.dart';
+import '../models/date_picker_range.dart';
 import '../widgets/session/session_entry_form.dart';
-import '../widgets/session/session_form.dart';
+import '../models/session_form_model.dart';
 
 class SessionEntryScreen extends StatefulWidget {
   const SessionEntryScreen({super.key});
