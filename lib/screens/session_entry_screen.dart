@@ -7,18 +7,19 @@ import '../services/rate_service.dart';
 import '../services/service_locator.dart';
 import '../services/session_service.dart';
 import '../widgets/evs_app_bar.dart';
+import '../widgets/floating_add_button.dart';
 import '../widgets/session/date_picker_range.dart';
 import '../widgets/session/session_entry_form.dart';
 import '../widgets/session/session_form.dart';
 
-class SessionEntry extends StatefulWidget {
-  const SessionEntry({super.key});
+class SessionEntryScreen extends StatefulWidget {
+  const SessionEntryScreen({super.key});
 
   @override
-  State<SessionEntry> createState() => _SessionEntryState();
+  State<SessionEntryScreen> createState() => _SessionEntryScreenState();
 }
 
-class _SessionEntryState extends State<SessionEntry> {
+class _SessionEntryScreenState extends State<SessionEntryScreen> {
   late final SessionService _sessionService;
   late final RateService _rateService;
   late final LogService _logService;
@@ -26,10 +27,11 @@ class _SessionEntryState extends State<SessionEntry> {
   late final Iterable<RateType> _rateTypes;
   late final DatePickerRange _datePickerRange;
 
-  _SessionEntryState(
-      {SessionService? sessionService,
-      RateService? rateService,
-      LogService? logService}) {
+  _SessionEntryScreenState({
+    SessionService? sessionService,
+    RateService? rateService,
+    LogService? logService,
+  }) {
     _sessionService = sessionService ?? ServiceLocator.get<SessionService>();
     _rateService = rateService ?? ServiceLocator.get<RateService>();
     _logService = logService ?? ServiceLocator.get<LogService>();
@@ -42,6 +44,10 @@ class _SessionEntryState extends State<SessionEntry> {
     var addedSession = await _sessionService.insert(session);
 
     _logService.log('saved session to db with id: ${addedSession.id}');
+  }
+
+  void handleNewSessionPressed() {
+    // todo
   }
 
   @override
@@ -74,12 +80,9 @@ class _SessionEntryState extends State<SessionEntry> {
           onSubmit: handleFormSubmit,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'New Session',
-        onPressed: () {
-          // todo
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: FloatingAddButton(
+        tooltip: 'Add Session',
+        onPressed: handleNewSessionPressed,
       ),
     );
   }

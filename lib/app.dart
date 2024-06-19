@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const SessionEntry(),
+      home: const SessionEntryScreen(),
     );
   }
 }
