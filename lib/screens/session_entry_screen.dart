@@ -20,35 +20,13 @@ class SessionEntryScreen extends StatefulWidget {
 }
 
 class _SessionEntryScreenState extends State<SessionEntryScreen> {
-  late final SessionService _sessionService;
-  late final RateService _rateService;
-  late final LogService _logService;
-
   late final Iterable<RateType> _rateTypes;
   late final DatePickerRange _datePickerRange;
 
-  _SessionEntryScreenState({
-    SessionService? sessionService,
-    RateService? rateService,
-    LogService? logService,
-  }) {
-    _sessionService = sessionService ?? ServiceLocator.get<SessionService>();
-    _rateService = rateService ?? ServiceLocator.get<RateService>();
-    _logService = logService ?? ServiceLocator.get<LogService>();
-  }
-
-  void handleFormSubmit(SessionForm entry) async {
-    _logService.log('handle session form submit');
-    // todo - try/catch
-    var session = Session.fromFormEntry(entry);
-    var addedSession = await _sessionService.insert(session);
-
-    _logService.log('saved session to db with id: ${addedSession.id}');
-  }
-
-  void handleNewSessionPressed() {
-    // todo
-  }
+  // todo - invert this?
+  LogService get _logService => ServiceLocator.get<LogService>();
+  SessionService get _sessionService => ServiceLocator.get<SessionService>();
+  RateService get _rateService => ServiceLocator.get<RateService>();
 
   @override
   void initState() {
@@ -65,6 +43,19 @@ class _SessionEntryScreenState extends State<SessionEntryScreen> {
     _rateTypes = _rateService.getRateTypes();
   }
 
+  void _handleFormSubmit(SessionForm entry) async {
+    _logService.log('handle session form submit');
+    // todo - try/catch
+    var session = Session.fromFormEntry(entry);
+    var addedSession = await _sessionService.insert(session);
+
+    _logService.log('saved session to db with id: ${addedSession.id}');
+  }
+
+  void _handleNewSessionPressed() {
+    // todo
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,12 +68,12 @@ class _SessionEntryScreenState extends State<SessionEntryScreen> {
         child: SessionEntryForm(
           rateTypes: _rateTypes,
           datePickerRange: _datePickerRange,
-          onSubmit: handleFormSubmit,
+          onSubmit: _handleFormSubmit,
         ),
       ),
       floatingActionButton: FloatingAddButton(
         tooltip: 'Add Session',
-        onPressed: handleNewSessionPressed,
+        onPressed: _handleNewSessionPressed,
       ),
     );
   }
