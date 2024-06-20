@@ -1,4 +1,4 @@
-import '../session_form_model.dart';
+import '../session_form.dart';
 
 class Session {
   final int? id;

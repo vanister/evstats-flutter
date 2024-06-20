@@ -10,7 +10,7 @@ import '../widgets/evs_app_bar.dart';
 import '../widgets/floating_add_button.dart';
 import '../models/date_picker_range.dart';
 import '../widgets/session/session_entry_form.dart';
-import '../models/session_form_model.dart';
+import '../models/session_form.dart';
 
 class SessionEntryScreen extends StatefulWidget {
   const SessionEntryScreen({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../models/db/rate_type.dart';
 import '../../models/date_picker_range.dart';
-import '../../models/session_form_model.dart';
+import '../../models/session_form.dart';
 import '../../helpers/session_helper.dart';
 import '../../validators/session_validator.dart';
 import '../../helpers/date_helper.dart';
