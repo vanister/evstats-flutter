@@ -1,7 +1,7 @@
-# EV Charge Stats Tracker
+# EV Charge Stats
 
-// TODO
+A charge stats logger inspired by Tesla's charge stats view in thr Tesla app.
 
 ## Getting Started
 
-// TODO
+// todo
