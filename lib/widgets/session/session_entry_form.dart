@@ -7,6 +7,7 @@ import '../../models/session_form.dart';
 import '../../helpers/session_helper.dart';
 import '../../validators/session_validator.dart';
 import '../../helpers/date_helper.dart';
+import '../evs_form_field.dart';
 
 class SessionEntryForm extends StatefulWidget {
   /// Raised when a valid session entry has been made in the form and the
@@ -104,26 +105,22 @@ class _SessionEntryFormState extends State<SessionEntryForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            decoration: const InputDecoration(
-              labelText: 'kWh added *',
-            ),
+          EvsFormField(
+            labelText: 'kWh added *',
             keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            maxLength: 3,
+            inputFormatter: FilteringTextInputFormatter.digitsOnly,
+            maxLength: 4,
             controller: _kwhController,
-            // this makes it required
             validator: validateKwhField,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              // todo - make this a date entry field
               Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'YYYY-MM-DD',
-                    labelText: 'Date *',
-                  ),
+                child: EvsFormField(
+                  hintText: 'YYYY-MM-DD',
+                  labelText: 'Date *',
                   keyboardType: TextInputType.datetime,
                   controller: _dateController,
                   validator: validateDateField,

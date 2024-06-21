@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/vehicle_helper.dart';
 import '../widgets/evs_app_bar.dart';
 import '../widgets/floating_add_button.dart';
 
@@ -11,16 +12,16 @@ class VehicleSelectionScreen extends StatefulWidget {
 }
 
 class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
-  late final String title;
-
   @override
   void initState() {
     super.initState();
-
-    title = 'Add a vehicle';
   }
 
-  void handleAddVehiclePressed() {}
+  void handleAddVehiclePressed() async {
+    var result = await showVehicleForm(context: context);
+
+    print(result);
+  }
 
   // void handleFormSubmit(VehicleForm form) {}
 
@@ -28,7 +29,7 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EvsAppBar(
-        titleText: title,
+        titleText: 'Vehicles',
         context: context,
       ),
       body: const Placeholder(),
