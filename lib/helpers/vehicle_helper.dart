@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/modal_bottom_sheet_header.dart';
+import '../models/vehicle_form.dart';
 import '../widgets/vehicle/vehicle_add_edit_form.dart';
 
 Future showVehicleForm({
   required BuildContext context,
-  Map<String, dynamic>? form,
+  VehicleForm? editingForm,
 }) {
   final maxHeight = MediaQuery.of(context).size.height * 0.90;
 
@@ -19,21 +19,14 @@ Future showVehicleForm({
     builder: (context) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            // header row
-            ModalBottleSheetHeader(
-              doneText: 'Add',
-              onCancelPressed: () {},
-              onDonePressed: () {},
-            ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: VehicleAddEditForm(
-                isNew: false,
-              ),
-            ),
-          ],
+        child: VehicleAddEditForm(
+          isNew: false,
+          onSubmit: (VehicleForm form) {
+            Navigator.pop(context, form);
+          },
+          onCancel: () {
+            Navigator.pop(context);
+          },
         ),
       );
     },

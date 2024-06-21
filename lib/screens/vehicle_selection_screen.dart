@@ -17,13 +17,11 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
     super.initState();
   }
 
-  void handleAddVehiclePressed() async {
+  void _handleAddVehiclePressed() async {
     var result = await showVehicleForm(context: context);
 
     print(result);
   }
-
-  // void handleFormSubmit(VehicleForm form) {}
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
       body: const Placeholder(),
       floatingActionButton: FloatingAddButton(
         tooltip: 'Add Vehicle',
-        onPressed: handleAddVehiclePressed,
+        onPressed: _handleAddVehiclePressed,
       ),
     );
   }
